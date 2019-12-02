@@ -23,8 +23,6 @@ namespace ToolBox.Runtime
 			Invoke(method, time);
 		}
 
-		public void CancelTimer() => CancelInvoke();
-
 		private void InternalTimer() => events?.Invoke();
 
 		[System.Serializable]
