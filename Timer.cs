@@ -4,6 +4,7 @@ using UnityEngine.Events;
 
 namespace ToolBox.Runtime
 {
+	[DisallowMultipleComponent]
 	public class Timer : MonoBehaviour
 	{
 		[SerializeField, ReorderableList] private TimerData[] timers = null;
@@ -20,6 +21,7 @@ namespace ToolBox.Runtime
 			events = timer.Events;
 
 			float time = Random.Range(possibleTime.x, possibleTime.y);
+			
 			Invoke(method, time);
 		}
 
