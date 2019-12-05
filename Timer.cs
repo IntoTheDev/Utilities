@@ -21,7 +21,7 @@ namespace ToolBox.Runtime
 			events = timer.Events;
 
 			float time = Random.Range(possibleTime.x, possibleTime.y);
-			
+
 			Invoke(method, time);
 		}
 

@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace ToolBox.Runtime
 {
-	[DisallowMultipleComponent, RequireComponent(typeof(BoxCollider2D))]
+	[DisallowMultipleComponent]
 	public class TriggerArea : MonoBehaviour
 	{
 		[SerializeField, ReorderableList] private EventsData[] eventsData = null;
