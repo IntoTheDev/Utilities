@@ -8,11 +8,11 @@ namespace ToolBox.Runtime
 	[DisallowMultipleComponent]
 	public class TriggerArea : MonoBehaviour
 	{
-		[SerializeField, ReorderableList] private EventsData[] eventsData = null;
+		[SerializeField, ReorderableList] private EventsData[] onEnter = null;
 
 		private int index = 0;
 
-		private void OnTriggerEnter2D(Collider2D collision) => eventsData[index].Call(collision.gameObject);
+		private void OnTriggerEnter2D(Collider2D collision) => onEnter[index].Call(collision.gameObject);
 
 		public void SetIndex(int index) => this.index = index;
 
