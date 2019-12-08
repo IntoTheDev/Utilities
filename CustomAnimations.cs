@@ -1,7 +1,7 @@
 ﻿using ToolBox.Attributes;
 using UnityEngine;
 
-namespace ToolBox.Runtime
+namespace ToolBox.Framework.Utilities
 {
 	public class CustomAnimations : MonoBehaviour
 	{

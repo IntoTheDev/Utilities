@@ -1,7 +1,14 @@
 ﻿using UnityEngine;
-using UnityEngine.Events;
 
-public abstract class OnEvent : MonoBehaviour
+namespace ToolBox.Framework.Utilities
 {
-	[SerializeField] protected UnityEvent onEvent = null;
+	[RequireComponent(typeof(EventsContainer))]
+	public abstract class OnEvent : MonoBehaviour
+	{
+		[SerializeField] protected EventsContainer eventsContainer = null;
+		[SerializeField] protected int index = 0;
+
+		public void SetIndex(int index) => this.index = index;
+	}
+
 }

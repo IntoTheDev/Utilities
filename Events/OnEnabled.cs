@@ -1,4 +1,7 @@
-﻿public class OnEnabled : OnEvent
+﻿namespace ToolBox.Framework.Utilities
 {
-	private void OnEnable() => onEvent?.Invoke();
+	public class OnEnabled : OnEvent
+	{
+		private void OnEnable() => eventsContainer.ExecuteEvent(index);
+	}
 }

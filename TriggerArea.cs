@@ -3,7 +3,7 @@ using ToolBox.Groups;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace ToolBox.Runtime
+namespace ToolBox.Framework.Utilities
 {
 	[DisallowMultipleComponent]
 	public class TriggerArea : MonoBehaviour

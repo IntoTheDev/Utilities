@@ -1,4 +1,7 @@
-﻿public class OnStart : OnEvent
+﻿namespace ToolBox.Framework.Utilities
 {
-	private void Start() => onEvent?.Invoke();
+	public class OnStart : OnEvent
+	{
+		private void Start() => eventsContainer.ExecuteEvent(index);
+	}
 }

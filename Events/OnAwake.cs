@@ -1,4 +1,7 @@
-﻿public class OnAwake : OnEvent
+﻿namespace ToolBox.Framework.Utilities
 {
-	private void Awake() => onEvent?.Invoke();
+	public class OnAwake : OnEvent
+	{
+		private void Awake() => eventsContainer.ExecuteEvent(index);
+	}
 }
