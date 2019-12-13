@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
+using Sirenix.OdinInspector;
 
 namespace ToolBox.Framework.Utilities
 {
-	[RequireComponent(typeof(EventsContainer))]
 	public abstract class OnEvent : MonoBehaviour
 	{
-		[SerializeField] protected EventsContainer eventsContainer = null;
+		[SerializeField, ListDrawerSettings(NumberOfItemsPerPage = 1)] protected UnityEvent[] events = null;
 		[SerializeField] protected int index = 0;
 
 		public void SetIndex(int index) => this.index = index;

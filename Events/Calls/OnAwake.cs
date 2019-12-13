@@ -2,6 +2,6 @@
 {
 	public class OnAwake : OnEvent
 	{
-		private void Awake() => eventsContainer.ExecuteEvent(index);
+		private void Awake() => events[index]?.Invoke();
 	}
 }

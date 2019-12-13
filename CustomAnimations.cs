@@ -1,12 +1,13 @@
-﻿using ToolBox.Attributes;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace ToolBox.Framework.Utilities
 {
+	[RequireComponent(typeof(Animator))]
 	public class CustomAnimations : MonoBehaviour
 	{
-		[SerializeField, BoxGroup("Components")] private Animator animator = null;
-		[SerializeField, BoxGroup("Data"), ReorderableList] private AnimationClip[] animations = null;
+		[SerializeField, FoldoutGroup("Components"), Required] private Animator animator = null;
+		[SerializeField, FoldoutGroup("Data")] private AnimationClip[] animations = null;
 
 		private int[] hashes = null;
 
@@ -19,6 +20,7 @@ namespace ToolBox.Framework.Utilities
 				hashes[i] = Animator.StringToHash(animations[i].name);
 		}
 
+		[Button("Play Animation")]
 		public void PlayAnimation(int index) => animator.Play(hashes[index], -1, 0f);
 	}
 }

@@ -2,6 +2,6 @@
 {
 	public class OnDisabled : OnEvent
 	{
-		private void OnDisable() => eventsContainer.ExecuteEvent(index);
+		private void OnDisable() => events[index]?.Invoke();
 	}
 }

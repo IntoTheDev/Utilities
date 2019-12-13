@@ -1,10 +1,10 @@
-﻿using ToolBox.Attributes;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class InputEvents : MonoBehaviour
 {
-	[SerializeField, ReorderableList] private InputEvent[] inputEvents = null;
+	[SerializeField, ListDrawerSettings(NumberOfItemsPerPage = 1)] private InputEvent[] inputEvents = null;
 
 	private void Update()
 	{
@@ -14,7 +14,6 @@ public class InputEvents : MonoBehaviour
 				inputEvents[i].Events?.Invoke();
 		}
 	}
-
 
 	[System.Serializable]
 	private struct InputEvent

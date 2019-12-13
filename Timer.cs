@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ToolBox.Attributes;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,8 +8,8 @@ namespace ToolBox.Framework.Utilities
 	[DisallowMultipleComponent]
 	public class Timer : MonoBehaviour
 	{
-		[SerializeField, ReorderableList] private TimerData[] timers = null;
-		[SerializeField, ReadOnly] private int eventsCount = 0;
+		[SerializeField, ListDrawerSettings(NumberOfItemsPerPage = 1), FoldoutGroup("Data")] private TimerData[] timers = null;
+		[SerializeField, ReadOnly, FoldoutGroup("Debug")] private int timersCount = 0;
 
 		private List<TimerData> timerDatas = new List<TimerData>();
 
@@ -17,7 +17,7 @@ namespace ToolBox.Framework.Utilities
 		{
 			float deltaTime = Time.deltaTime;
 
-			for (int i = eventsCount - 1; i >= 0; i--)
+			for (int i = timersCount - 1; i >= 0; i--)
 			{
 				TimerData timer = timerDatas[i];
 				timer.CurrentTime -= deltaTime;
@@ -26,11 +26,12 @@ namespace ToolBox.Framework.Utilities
 				{
 					timer.Events?.Invoke();
 					timerDatas.Remove(timer);
-					eventsCount--;
+					timersCount--;
 				}
 			}
 		}
 
+		[Button("Launch Timer"), FoldoutGroup("Debug")]
 		public void LaunchTimer(int index)
 		{
 			TimerData timer = timers[index];
@@ -41,7 +42,7 @@ namespace ToolBox.Framework.Utilities
 			Vector2 possibleTime = timer.Time;
 			timer.CurrentTime = Random.Range(possibleTime.x, possibleTime.y);
 			timerDatas.Add(timer);
-			eventsCount++;
+			timersCount++;
 		}
 
 		[System.Serializable]

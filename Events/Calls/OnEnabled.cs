@@ -2,6 +2,6 @@
 {
 	public class OnEnabled : OnEvent
 	{
-		private void OnEnable() => eventsContainer.ExecuteEvent(index);
+		private void OnEnable() => events[index]?.Invoke();
 	}
 }

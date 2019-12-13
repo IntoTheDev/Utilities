@@ -2,6 +2,6 @@
 {
 	public class OnStart : OnEvent
 	{
-		private void Start() => eventsContainer.ExecuteEvent(index);
+		private void Start() => events[index]?.Invoke();
 	}
 }

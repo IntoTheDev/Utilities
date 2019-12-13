@@ -1,4 +1,4 @@
-﻿using ToolBox.Attributes;
+﻿using Sirenix.OdinInspector;
 using ToolBox.Groups;
 using UnityEngine;
 using UnityEngine.Events;
@@ -6,18 +6,17 @@ using UnityEngine.Events;
 namespace ToolBox.Framework.Utilities
 {
 	[DisallowMultipleComponent]
-	public class TriggerArea : MonoBehaviour
+	public abstract class TriggerArea : MonoBehaviour
 	{
-		[SerializeField, ReorderableList] private EventsData[] onEnter = null;
+		[SerializeField, ListDrawerSettings(NumberOfItemsPerPage = 1), FoldoutGroup("Data")] protected EventsData[] onEnter = null;
 
-		private int index = 0;
+		[SerializeField, ReadOnly, FoldoutGroup("Debug")] protected int index = 0;
 
-		private void OnTriggerEnter2D(Collider2D collision) => onEnter[index].Call(collision.gameObject);
-
+		[Button("Set Index"), FoldoutGroup("Debug")]
 		public void SetIndex(int index) => this.index = index;
 
 		[System.Serializable]
-		private struct EventsData
+		protected struct EventsData
 		{
 #if UNITY_EDITOR
 			[SerializeField] private string editorName;

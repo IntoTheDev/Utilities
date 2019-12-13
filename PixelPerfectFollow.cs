@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
 
 public class PixelPerfectFollow : MonoBehaviour
 {
@@ -25,5 +26,6 @@ public class PixelPerfectFollow : MonoBehaviour
 		cachedTransform.position = targetPosition;
 	}
 
+	[Button("Set Target")]
 	public void SetTarget(Transform target) => this.target = target;
 }
