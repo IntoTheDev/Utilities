@@ -7,7 +7,7 @@ namespace ToolBox.Framework.Utilities
 	public class CustomAnimations : MonoBehaviour
 	{
 		[SerializeField, FoldoutGroup("Components"), Required] private Animator animator = null;
-		[SerializeField, FoldoutGroup("Data")] private AnimationClip[] animations = null;
+		[SerializeField, FoldoutGroup("Data"), ListDrawerSettings(Expanded = true)] private AnimationClip[] animations = null;
 
 		private int[] hashes = null;
 
@@ -20,7 +20,10 @@ namespace ToolBox.Framework.Utilities
 				hashes[i] = Animator.StringToHash(animations[i].name);
 		}
 
-		[Button("Play Animation")]
-		public void PlayAnimation(int index) => animator.Play(hashes[index], -1, 0f);
+		[Button("Play Animation"), FoldoutGroup("Debug")]
+		public void PlayAnimation(int animationIndex) => animator.Play(hashes[animationIndex], -1, 0f);
+
+		[Button("Play Animation at Random Frame"), FoldoutGroup("Debug")]
+		public void PlayAnimationAtRandomFrame(int animationIndex) => animator.Play(hashes[animationIndex], -1, Random.value);
 	}
 }

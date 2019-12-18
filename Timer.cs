@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using MEC;
 using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,56 +9,44 @@ namespace ToolBox.Framework.Utilities
 	[DisallowMultipleComponent]
 	public class Timer : MonoBehaviour
 	{
-		[SerializeField, ListDrawerSettings(NumberOfItemsPerPage = 1), FoldoutGroup("Data")] private TimerData[] timers = null;
-		[SerializeField, ReadOnly, FoldoutGroup("Debug")] private int timersCount = 0;
+		[SerializeField, ListDrawerSettings(NumberOfItemsPerPage = 1, Expanded = true, DraggableItems = false), FoldoutGroup("Data")] private TimerData[] timers = null;
 
-		private List<TimerData> timerDatas = new List<TimerData>();
-
-		private void Update()
+		private IEnumerator<float> RunTimer(TimerData timerData)
 		{
-			float deltaTime = Time.deltaTime;
+			yield return Timing.WaitForSeconds(timerData.GetTime());
 
-			for (int i = timersCount - 1; i >= 0; i--)
-			{
-				TimerData timer = timerDatas[i];
-				timer.CurrentTime -= deltaTime;
-
-				if (timer.CurrentTime <= 0f)
-				{
-					timer.Events?.Invoke();
-					timerDatas.Remove(timer);
-					timersCount--;
-				}
-			}
+			timerData.Events?.Invoke();
 		}
 
 		[Button("Launch Timer"), FoldoutGroup("Debug")]
 		public void LaunchTimer(int index)
 		{
-			TimerData timer = timers[index];
-
-			if (timerDatas.Contains(timer))
-				return;
-
-			Vector2 possibleTime = timer.Time;
-			timer.CurrentTime = Random.Range(possibleTime.x, possibleTime.y);
-			timerDatas.Add(timer);
-			timersCount++;
+			TimerData timerData = timers[index];
+			timerData.coroutineHandle = Timing.RunCoroutine(RunTimer(timerData));
 		}
+
+		[Button("Stop Timer"), FoldoutGroup("Debug")]
+		public void StopTimer(int index) => Timing.KillCoroutines(timers[index].coroutineHandle);
 
 		[System.Serializable]
 		private class TimerData
 		{
 #if UNITY_EDITOR
-			[SerializeField] private string editorName;
+			[SerializeField, FoldoutGroup("Debug")] private string editorName;
 #endif
 
-			public float CurrentTime;
-			public Vector2 Time => time;
 			public UnityEvent Events => events;
+			public CoroutineHandle coroutineHandle;
 
-			[SerializeField] private Vector2 time;
-			[SerializeField] private UnityEvent events;
+			[SerializeField, FoldoutGroup("Data")] private Vector2 possibleTime;
+			[SerializeField, FoldoutGroup("Data")] private UnityEvent events;
+			[SerializeField, ReadOnly, FoldoutGroup("Debug")] private float currentTime;
+
+			public float GetTime()
+			{
+				currentTime = Random.Range(possibleTime.x, possibleTime.y);
+				return currentTime;
+			}
 		}
 	}
 }

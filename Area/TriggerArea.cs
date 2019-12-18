@@ -8,7 +8,7 @@ namespace ToolBox.Framework.Utilities
 	[DisallowMultipleComponent]
 	public abstract class TriggerArea : MonoBehaviour
 	{
-		[SerializeField, ListDrawerSettings(NumberOfItemsPerPage = 1), FoldoutGroup("Data")] protected EventsData[] onEnter = null;
+		[SerializeField, ListDrawerSettings(NumberOfItemsPerPage = 1, Expanded = true, DraggableItems = false), FoldoutGroup("Data")] protected EventsData[] onEnter = null;
 
 		[SerializeField, ReadOnly, FoldoutGroup("Debug")] protected int index = 0;
 
@@ -22,7 +22,7 @@ namespace ToolBox.Framework.Utilities
 			[SerializeField] private string editorName;
 #endif
 
-			[SerializeField] private Group[] groups;
+			[SerializeField, AssetSelector] private Group[] groups;
 			[SerializeField] private UnityEvent events;
 
 			public void Call(GameObject entity)
