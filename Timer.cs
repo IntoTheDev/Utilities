@@ -22,11 +22,11 @@ namespace ToolBox.Framework.Utilities
 		public void LaunchTimer(int index)
 		{
 			TimerData timerData = timers[index];
-			timerData.coroutineHandle = Timing.RunCoroutine(RunTimer(timerData));
+			timerData.CoroutineHandle = Timing.RunCoroutine(RunTimer(timerData));
 		}
 
 		[Button("Stop Timer"), FoldoutGroup("Debug")]
-		public void StopTimer(int index) => Timing.KillCoroutines(timers[index].coroutineHandle);
+		public void StopTimer(int index) => Timing.KillCoroutines(timers[index].CoroutineHandle);
 
 		[System.Serializable]
 		private class TimerData
@@ -36,7 +36,7 @@ namespace ToolBox.Framework.Utilities
 #endif
 
 			public UnityEvent Events => events;
-			public CoroutineHandle coroutineHandle;
+			public CoroutineHandle CoroutineHandle;
 
 			[SerializeField, FoldoutGroup("Data")] private Vector2 possibleTime;
 			[SerializeField, FoldoutGroup("Data")] private UnityEvent events;
