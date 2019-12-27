@@ -13,6 +13,9 @@ public class PixelPerfectFollow : MonoBehaviour
 
 	private void FixedUpdate()
 	{
+		if (target == null)
+			return;
+
 		Vector3 cameraPosition = cachedTransform.position;
 		Vector3 targetPosition = target.position;
 		float speed = followSpeed * Time.fixedDeltaTime;
