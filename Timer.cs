@@ -11,6 +11,12 @@ namespace ToolBox.Framework.Utilities
 	{
 		[SerializeField, ListDrawerSettings(NumberOfItemsPerPage = 1, Expanded = true, DraggableItems = false), FoldoutGroup("Data")] private TimerData[] timers = null;
 
+		private void OnDisable()
+		{
+			for (int i = 0; i < timers.Length; i++)
+				Timing.KillCoroutines(timers[i].CoroutineHandle);
+		}
+
 		private IEnumerator<float> RunTimer(TimerData timerData)
 		{
 			yield return Timing.WaitForSeconds(timerData.GetTime());
@@ -26,7 +32,8 @@ namespace ToolBox.Framework.Utilities
 		}
 
 		[Button("Stop Timer"), FoldoutGroup("Debug")]
-		public void StopTimer(int index) => Timing.KillCoroutines(timers[index].CoroutineHandle);
+		public void StopTimer(int index) =>
+			Timing.KillCoroutines(timers[index].CoroutineHandle);
 
 		[System.Serializable]
 		private class TimerData

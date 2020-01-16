@@ -7,7 +7,7 @@ namespace ToolBox.Framework.Utilities
 	public class CustomAnimations : MonoBehaviour
 	{
 		[SerializeField, FoldoutGroup("Components"), Required] private Animator animator = null;
-		[SerializeField, FoldoutGroup("Data"), ListDrawerSettings(Expanded = true)] private AnimationClip[] animations = null;
+		[SerializeField, FoldoutGroup("Data"), ListDrawerSettings(Expanded = true), AssetSelector] private AnimationClip[] animations = null;
 
 		private int blend = 0;
 		private int[] hashes = null;

@@ -1,9 +1,6 @@
-﻿using UnityEngine;
-using MEC;
-using Sirenix.OdinInspector;
-using System.Collections.Generic;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
 using UnityEngine.Events;
-using ToolBox.Extensions;
 
 namespace ToolBox.Framework.Utilities
 {

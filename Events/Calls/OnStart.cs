@@ -2,6 +2,7 @@
 {
 	public class OnStart : OnEvent
 	{
-		private void Start() => events[index]?.Invoke();
+		private void Start() =>
+			events[index]?.Invoke();
 	}
 }
