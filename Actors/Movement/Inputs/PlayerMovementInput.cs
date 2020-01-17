@@ -23,7 +23,7 @@ namespace ToolBox.Behaviours.Actions
 			actorMovement.SetInput(null);
 		}
 
-		protected override void Task()
+		public override void ProcessTask()
 		{
 			Direction = new Vector2
 			{

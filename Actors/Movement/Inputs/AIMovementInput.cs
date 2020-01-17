@@ -8,8 +8,11 @@ using UnityEngine.Events;
 [RequireComponent(typeof(ActorMovement))]
 public class AIMovementInput : MonoBehaviour, IMovementInput
 {
-	public UnityEvent OnPathComplete = null;
+   	[HideInInspector] public UnityAction OnPositionReached = null;
 
+	public float Distance => distance;
+	public float StopDistance => stopDistance;
+	public float MoveSpeed => movementSpeed;
 	public float MovementSpeed
 	{
 		get
@@ -26,6 +29,7 @@ public class AIMovementInput : MonoBehaviour, IMovementInput
 	public Vector2 Direction { get; private set; }
 
 	[SerializeField, Required, FoldoutGroup("Components")] private ActorMovement actorMovement = null;
+	[SerializeField, Required, FoldoutGroup("Components")] private Seeker seeker = null;
 
 	[SerializeField, FoldoutGroup("Data")] private float stopDistance = 1f;
 	[SerializeField, FoldoutGroup("Data")] private float nextWaypointDistance = 1f;
@@ -35,25 +39,21 @@ public class AIMovementInput : MonoBehaviour, IMovementInput
 	[SerializeField, FoldoutGroup("Debug"), ReadOnly] private Vector3 desiredPosition = default;
 	[SerializeField, FoldoutGroup("Debug"), ReadOnly] private Vector3 lastDesiredPosition = default;
 	[SerializeField, FoldoutGroup("Debug"), ReadOnly] private bool isDesiredPositionVisible = false;
+	[SerializeField, FoldoutGroup("Debug"), ReadOnly] private bool isLinear = false;
 
 	private Transform cachedTransform = null;
 
 	private Path path = null;
-	private Seeker seeker = null;
 
 	private int currentWaypoint = 0;
 	private int waypointsCount = 0;
 	private Vector2 direction = default;
 	private float distance = 0f;
-	private bool isLinear = false;
 
 	private CoroutineHandle stateCoroutine = default;
 
-	private void Awake()
-	{
+	private void Awake() =>
 		cachedTransform = transform;
-		seeker = GetComponent<Seeker>();
-	}
 
 	private void OnEnable()
 	{
@@ -73,11 +73,11 @@ public class AIMovementInput : MonoBehaviour, IMovementInput
 	{
 		Vector3 position = cachedTransform.position;
 
-		if (isDesiredPositionVisible && !isLinear)
+		if (isDesiredPositionVisible)
 		{
-			Direction = Vector3.Normalize(desiredPosition - position) * movementSpeed;
-
-			isLinear = true;
+			Direction = distance > stopDistance 
+				? Vector3.Normalize(desiredPosition - position) * movementSpeed 
+				: Vector3.zero;
 		}
 		else if (path != null)
 		{
@@ -153,9 +153,15 @@ public class AIMovementInput : MonoBehaviour, IMovementInput
 		distance = Vector3.Distance(position, desiredPosition);
 
 		if (distance < stopDistance)
+		{
 			Direction = Vector2.zero;
+			OnPositionReached?.Invoke();
+		}
 
 		isDesiredPositionVisible = !Physics2D.Raycast(position, direction, distance, obstacles);
+
+		if (!isDesiredPositionVisible)
+			isLinear = false;
 
 		return position;
 	}

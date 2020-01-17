@@ -27,6 +27,7 @@ public class ActorMovement : MonoBehaviour
 		while (true)
 		{
 			rb.MovePosition(rb.position + movementInput.Direction * Time.fixedDeltaTime);
+
 			yield return Timing.WaitForOneFrame;
 		}
 	}
