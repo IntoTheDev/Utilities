@@ -9,9 +9,10 @@ public class PixelPerfectFollow : MonoBehaviour
 
 	private Transform cachedTransform = null;
 
-	private void Awake() => cachedTransform = transform;
+	private void Awake() =>
+		cachedTransform = transform;
 
-	private void FixedUpdate()
+	private void LateUpdate()
 	{
 		if (target == null)
 			return;
@@ -22,13 +23,14 @@ public class PixelPerfectFollow : MonoBehaviour
 
 		targetPosition = Vector3.MoveTowards(cameraPosition, targetPosition, speed);
 
-		targetPosition.x = (Mathf.Round(targetPosition.x * pixelsPerUnit) / pixelsPerUnit);
-		targetPosition.y = (Mathf.Round(targetPosition.y * pixelsPerUnit) / pixelsPerUnit);
+		//targetPosition.x = (Mathf.Round(targetPosition.x * pixelsPerUnit) / pixelsPerUnit);
+		//targetPosition.y = (Mathf.Round(targetPosition.y * pixelsPerUnit) / pixelsPerUnit);
 		targetPosition.z = -10f;
 
 		cachedTransform.position = targetPosition;
 	}
 
 	[Button("Set Target")]
-	public void SetTarget(Transform target) => this.target = target;
+	public void SetTarget(Transform target) =>
+		this.target = target;
 }

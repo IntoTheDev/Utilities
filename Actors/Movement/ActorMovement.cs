@@ -6,27 +6,36 @@ using UnityEngine.Events;
 public class ActorMovement : MonoBehaviour
 {
 	public UnityAction<IMovementInput> OnInputChange = null;
-	public IMovementInput MovementInput => movementInput;
+	public IMovementInput MovementInput { get; private set; } = null;
 
 	[SerializeField] private Rigidbody2D rb = null;
 
-	private IMovementInput movementInput = null;
 	private CoroutineHandle coroutineHandle = default;
-	private GameObject cachedObject = null;
 
 	private void Start()
 	{
-		cachedObject = gameObject;
-
-		if (movementInput != null)
+		if (MovementInput != null)
 			RunMovementCoroutine();
 	}
+
+	private void OnEnable()
+	{
+		if (coroutineHandle.IsValid)
+			Timing.ResumeCoroutines(coroutineHandle);
+	}
+
+	private void OnDisable() =>
+		Timing.PauseCoroutines(coroutineHandle);
 
 	private IEnumerator<float> Move()
 	{
 		while (true)
 		{
-			rb.MovePosition(rb.position + movementInput.Direction * Time.fixedDeltaTime);
+			//rb.MovePosition(rb.position + MovementInput.Direction * Time.fixedDeltaTime);
+			Vector2 direction = MovementInput.Direction;
+			direction.y = rb.velocity.y;
+
+			rb.velocity = direction;
 
 			yield return Timing.WaitForOneFrame;
 		}
@@ -34,8 +43,8 @@ public class ActorMovement : MonoBehaviour
 
 	public void SetInput(IMovementInput newInput)
 	{
-		movementInput = newInput;
-		OnInputChange?.Invoke(movementInput);
+		MovementInput = newInput;
+		OnInputChange?.Invoke(MovementInput);
 
 		Timing.KillCoroutines(coroutineHandle);
 
@@ -44,5 +53,5 @@ public class ActorMovement : MonoBehaviour
 	}
 
 	private void RunMovementCoroutine() =>
-		coroutineHandle = Timing.RunCoroutine(Move().CancelWith(cachedObject), Segment.FixedUpdate);
+		coroutineHandle = Timing.RunCoroutine(Move(), Segment.FixedUpdate);
 }

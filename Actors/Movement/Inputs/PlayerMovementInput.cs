@@ -1,6 +1,4 @@
-﻿using MEC;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ToolBox.Behaviours.Actions
 {
@@ -11,15 +9,24 @@ namespace ToolBox.Behaviours.Actions
 		[SerializeField] private float speed = 5f;
 		[SerializeField] private ActorMovement actorMovement = null;
 
+		public override void Initialize(BehaviourProcessor behaviourProcessor)
+		{
+			base.Initialize(behaviourProcessor);
+
+			actorMovement.SetInput(this);
+		}
+
 		public override void OnEnter()
 		{
-			RunTask();
+			base.OnEnter();
+
 			actorMovement.SetInput(this);
 		}
 
 		public override void OnExit()
 		{
-			StopTask();
+			base.OnExit();
+
 			actorMovement.SetInput(null);
 		}
 

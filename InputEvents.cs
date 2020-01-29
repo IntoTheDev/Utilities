@@ -14,7 +14,7 @@ public class InputEvents : MonoBehaviour
 				inputEvents[i].Events?.Invoke();
 		}
 	}
-
+	
 	[System.Serializable]
 	private struct InputEvent
 	{

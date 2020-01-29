@@ -13,7 +13,8 @@ namespace ToolBox.Framework.Utilities
 		[SerializeField, ReadOnly, FoldoutGroup("Debug")] protected int index = 0;
 
 		[Button("Set Index"), FoldoutGroup("Debug")]
-		public void SetIndex(int index) => this.index = index;
+		public void SetIndex(int index) =>
+			this.index = index;
 
 		[System.Serializable]
 		protected struct EventsData
