@@ -4,9 +4,8 @@ using UnityEngine;
 
 namespace ToolBox.Framework.Actors
 {
-	public class FlipOnMovement : SerializedMonoBehaviour
+	public class FlipOnMovement : FlipBase
 	{
-		[SerializeField, Required, FoldoutGroup("Data")] private Transform view = null;
 		[SerializeField, Required, FoldoutGroup("Data")] private ActorMovement actorMovement = null;
 
 		[OdinSerialize, ReadOnly, FoldoutGroup("Debug")] IMovementInput movementInput = null;
@@ -22,17 +21,16 @@ namespace ToolBox.Framework.Actors
 
 		private void Update()
 		{
+			if (movementInput == null)
+				return;
+
 			float direction = movementInput.Direction.x;
 
 			if (direction == 0f)
 				return;
 
-			float horizontalDirection = Mathf.Sign(direction);
-
-			Vector3 scale = view.localScale;
-			scale.x = horizontalDirection;
-
-			view.localScale = scale;
+			Quaternion side = direction > 0f ? rightRotation : leftRotation;
+			FlipView(side);
 		}
 
 		private void SetInput(IMovementInput movementInput) =>

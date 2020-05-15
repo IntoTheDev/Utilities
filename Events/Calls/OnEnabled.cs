@@ -1,7 +1,10 @@
-﻿namespace ToolBox.Framework.Utilities
+﻿using ToolBox.Observer;
+
+namespace ToolBox.Framework.Utilities
 {
 	public class OnEnabled : OnEvent
 	{
-		private void OnEnable() => events[index]?.Invoke();
+		private void OnEnable() =>
+			reactors.Dispatch();
 	}
 }

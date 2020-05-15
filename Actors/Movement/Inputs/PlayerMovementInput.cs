@@ -1,43 +1,39 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
-namespace ToolBox.Behaviours.Actions
+[RequireComponent(typeof(ActorMovement))]
+public class PlayerMovementInput : MonoBehaviour, IMovementInput
 {
-	public class PlayerMovementInput : Action, IMovementInput
+	public Vector2 Direction { get; private set; } = default;
+
+	private ActorMovement actorMovement = null;
+	private Vector2 currentDirection = default;
+
+	private PlayerInputActions inputActions = null;
+	private InputAction moveAction = null;
+
+	private void Awake()
 	{
-		public Vector2 Direction { get; private set; }
-
-		[SerializeField] private float speed = 5f;
-		[SerializeField] private ActorMovement actorMovement = null;
-
-		public override void Initialize(BehaviourProcessor behaviourProcessor)
-		{
-			base.Initialize(behaviourProcessor);
-
-			actorMovement.SetInput(this);
-		}
-
-		public override void OnEnter()
-		{
-			base.OnEnter();
-
-			actorMovement.SetInput(this);
-		}
-
-		public override void OnExit()
-		{
-			base.OnExit();
-
-			actorMovement.SetInput(null);
-		}
-
-		public override void ProcessTask()
-		{
-			Direction = new Vector2
-			{
-				x = Input.GetAxisRaw("Horizontal"),
-				y = Input.GetAxisRaw("Vertical")
-			}.normalized * speed;
-		}
+		actorMovement = GetComponent<ActorMovement>();
+		inputActions = new PlayerInputActions();
+		moveAction = inputActions.Player.Move;
 	}
 
+	private void OnEnable()
+	{
+		actorMovement.SetInput(this);
+		inputActions.Enable();	
+	}
+
+	private void OnDisable()
+	{
+		actorMovement.SetInput(null);
+		inputActions.Disable();
+	}
+
+	private void Update()
+	{
+		currentDirection.x = moveAction.ReadValue<Vector2>().x;
+		Direction = currentDirection;
+	}
 }

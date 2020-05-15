@@ -1,57 +1,52 @@
-﻿using MEC;
-using System.Collections.Generic;
+﻿using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ActorMovement : MonoBehaviour
+public class ActorMovement : SerializedMonoBehaviour
 {
-	public UnityAction<IMovementInput> OnInputChange = null;
-	public IMovementInput MovementInput { get; private set; } = null;
+	[SerializeField] private float startMovementSpeed = 5f;
+	[SerializeField] private bool smooth = false;
+	[SerializeField, Required] private Rigidbody2D body = null;
+	[OdinSerialize] private IMovementInput movementInput = null;
 
-	[SerializeField] private Rigidbody2D rb = null;
+	[HideInInspector] public UnityAction<IMovementInput> OnInputChange = null;
+	public IMovementInput MovementInput => movementInput;
+	public float MovementSpeed { get; set; } = 5f;
 
-	private CoroutineHandle coroutineHandle = default;
+	private void OnValidate() =>
+		MovementSpeed = startMovementSpeed;
 
-	private void Start()
-	{
-		if (MovementInput != null)
-			RunMovementCoroutine();
-	}
-
-	private void OnEnable()
-	{
-		if (coroutineHandle.IsValid)
-			Timing.ResumeCoroutines(coroutineHandle);
-	}
+	private void Start() =>
+		MovementSpeed = startMovementSpeed;
 
 	private void OnDisable() =>
-		Timing.PauseCoroutines(coroutineHandle);
+		body.velocity = Vector2.zero;
 
-	private IEnumerator<float> Move()
+	private void FixedUpdate()
 	{
-		while (true)
+		if (movementInput != null)
 		{
-			//rb.MovePosition(rb.position + MovementInput.Direction * Time.fixedDeltaTime);
-			Vector2 direction = MovementInput.Direction;
-			direction.y = rb.velocity.y;
+			Vector2 velocity = movementInput.Direction * MovementSpeed;
+			velocity.y = body.velocity.y;
 
-			rb.velocity = direction;
-
-			yield return Timing.WaitForOneFrame;
+			body.velocity = smooth ? Vector2.Lerp(body.velocity, velocity, 10f * Time.deltaTime) : velocity;
 		}
 	}
 
 	public void SetInput(IMovementInput newInput)
 	{
-		MovementInput = newInput;
-		OnInputChange?.Invoke(MovementInput);
+		movementInput = newInput;
+		OnInputChange?.Invoke(movementInput);
 
-		Timing.KillCoroutines(coroutineHandle);
+		if (newInput == null)
+		{
+			body.velocity = Vector2.zero;
 
-		if (newInput != null)
-			RunMovementCoroutine();
+			return;
+		}
 	}
 
-	private void RunMovementCoroutine() =>
-		coroutineHandle = Timing.RunCoroutine(Move(), Segment.FixedUpdate);
+	public void SetSmooth(bool smooth) =>
+		this.smooth = smooth;
 }

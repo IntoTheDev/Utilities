@@ -1,7 +1,10 @@
-﻿namespace ToolBox.Framework.Utilities
+﻿using ToolBox.Observer;
+
+namespace ToolBox.Framework.Utilities
 {
 	public class OnAwake : OnEvent
 	{
-		private void Awake() => events[index]?.Invoke();
+		private void Awake() =>
+			reactors.Dispatch();
 	}
 }

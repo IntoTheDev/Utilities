@@ -3,10 +3,9 @@ using UnityEngine;
 
 namespace ToolBox.Framework.Utilities
 {
-	[RequireComponent(typeof(Animator))]
 	public class CustomAnimations : MonoBehaviour
 	{
-		[SerializeField, FoldoutGroup("Components"), Required] private Animator animator = null;
+		[SerializeField, FoldoutGroup("Components"), Required, ChildGameObjectsOnly] private Animator animator = null;
 
 		[SerializeField, FoldoutGroup("Data"), ListDrawerSettings(Expanded = true), AssetSelector] private AnimationClip[] animations = null;
 

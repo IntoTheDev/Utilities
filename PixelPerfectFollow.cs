@@ -3,34 +3,24 @@ using UnityEngine;
 
 public class PixelPerfectFollow : MonoBehaviour
 {
+	[SerializeField] private float pixelsPerUnit = 16f;
 	[SerializeField] private Transform target = null;
-	[SerializeField] private float followSpeed = 1f;
-	[SerializeField] private float pixelsPerUnit = 32f;
+	[SerializeField] private float smoothValue = 0.25f;
 
 	private Transform cachedTransform = null;
 
 	private void Awake() =>
 		cachedTransform = transform;
 
-	private void LateUpdate()
+	private void FixedUpdate()
 	{
-		if (target == null)
-			return;
+		Vector3 newPosition = cachedTransform.position;
 
-		Vector3 cameraPosition = cachedTransform.position;
-		Vector3 targetPosition = target.position;
-		float speed = followSpeed * Time.fixedDeltaTime;
+		newPosition = Vector3.Lerp(newPosition, target.position, smoothValue * Time.fixedDeltaTime);
+		newPosition.x = Mathf.Floor(newPosition.x * pixelsPerUnit) / pixelsPerUnit;
+		newPosition.y = Mathf.Floor(newPosition.y * pixelsPerUnit) / pixelsPerUnit;
+		newPosition.z = -10f;
 
-		targetPosition = Vector3.MoveTowards(cameraPosition, targetPosition, speed);
-
-		//targetPosition.x = (Mathf.Round(targetPosition.x * pixelsPerUnit) / pixelsPerUnit);
-		//targetPosition.y = (Mathf.Round(targetPosition.y * pixelsPerUnit) / pixelsPerUnit);
-		targetPosition.z = -10f;
-
-		cachedTransform.position = targetPosition;
+		cachedTransform.position = newPosition;
 	}
-
-	[Button("Set Target")]
-	public void SetTarget(Transform target) =>
-		this.target = target;
 }

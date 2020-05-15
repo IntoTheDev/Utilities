@@ -1,13 +1,14 @@
 ﻿using MEC;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
+using ToolBox.Observer;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace ToolBox.Framework.Utilities
 {
 	[DisallowMultipleComponent]
-	public class Timer : MonoBehaviour
+	public class Timer : MonoBehaviour, IReactor
 	{
 		[SerializeField, ListDrawerSettings(NumberOfItemsPerPage = 1, Expanded = true, DraggableItems = false), FoldoutGroup("Data")] private TimerData[] timers = null;
 
@@ -34,6 +35,9 @@ namespace ToolBox.Framework.Utilities
 		[Button("Stop Timer"), FoldoutGroup("Debug")]
 		public void StopTimer(int index) =>
 			Timing.KillCoroutines(timers[index].CoroutineHandle);
+
+		public void HandleReaction() =>
+			LaunchTimer(0);
 
 		[System.Serializable]
 		private class TimerData
