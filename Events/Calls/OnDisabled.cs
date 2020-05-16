@@ -5,6 +5,6 @@ namespace ToolBox.Framework.Utilities
 	public class OnDisabled : OnEvent
 	{
 		private void OnDisable() =>
-			reactors.Dispatch();
+			reactors.Process();
 	}
 }

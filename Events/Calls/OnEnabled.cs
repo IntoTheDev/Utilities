@@ -5,6 +5,6 @@ namespace ToolBox.Framework.Utilities
 	public class OnEnabled : OnEvent
 	{
 		private void OnEnable() =>
-			reactors.Dispatch();
+			reactors.Process();
 	}
 }

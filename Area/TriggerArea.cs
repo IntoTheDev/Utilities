@@ -1,7 +1,7 @@
 ﻿using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using ToolBox.Groups;
-using ToolBox.Observer;
+using ToolBox.Modules;
 using UnityEngine;
 
 namespace ToolBox.Framework.Utilities
@@ -25,16 +25,16 @@ namespace ToolBox.Framework.Utilities
 #endif
 
 			[SerializeField, AssetSelector] private Group[] groups;
-			[SerializeField] private IReactor[] reactors;
-			[SerializeField] private IReactor<GameObject>[] reactorsGeneric;
+			[SerializeField] private ModulesContainer reactors;
+			[SerializeField] private ModulesContainer<GameObject> reactorsGeneric;
 
 			public void Call(GameObject entity)
 			{
 				if (!Group.IsEntityInGroups(entity, groups, CheckType.AllGroups))
 					return;
 
-				reactors.Dispatch();
-				reactorsGeneric.Dispatch(entity);
+				reactors.Process();
+				reactorsGeneric.Process(entity);
 			}
 		}
 	}

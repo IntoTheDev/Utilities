@@ -1,5 +1,4 @@
-﻿using Sirenix.OdinInspector;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ToolBox.Framework.Utilities
 {
@@ -8,7 +7,6 @@ namespace ToolBox.Framework.Utilities
 	{
 		[SerializeField] private Vector2 possibleValue;
 
-		public float GenerateValue() =>
-			Random.Range(possibleValue.x, possibleValue.y);
+		public float Value => Random.Range(possibleValue.x, possibleValue.y);
 	}
 }
