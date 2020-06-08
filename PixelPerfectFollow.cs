@@ -1,25 +1,52 @@
-﻿using UnityEngine;
+﻿using ToolBox.Modules;
+using UnityEngine;
 
-public class PixelPerfectFollow : MonoBehaviour
+namespace ToolBox.Utilities
 {
-	[SerializeField] private float pixelsPerUnit = 16f;
-	[SerializeField] private Transform target = null;
-	[SerializeField] private float smoothValue = 0.25f;
-
-	private Transform cachedTransform = null;
-
-	private void Awake() =>
-		cachedTransform = transform;
-
-	private void FixedUpdate()
+	public class PixelPerfectFollow : MonoBehaviour, IModule<Transform>
 	{
-		Vector3 newPosition = cachedTransform.position;
+		[SerializeField] private float pixelsPerUnit = 16f;
+		[SerializeField] private Transform target = null;
+		[SerializeField] private float smoothValue = 0.25f;
+		[SerializeField] private Vector2 offset = default;
 
-		newPosition = Vector3.Lerp(newPosition, target.position, smoothValue * Time.fixedDeltaTime);
-		newPosition.x = Mathf.Floor(newPosition.x * pixelsPerUnit) / pixelsPerUnit;
-		newPosition.y = Mathf.Floor(newPosition.y * pixelsPerUnit) / pixelsPerUnit;
-		newPosition.z = -10f;
+		private Transform cachedTransform = null;
 
-		cachedTransform.position = newPosition;
+		private void Awake() =>
+			cachedTransform = transform;
+
+		private void OnValidate()
+		{
+			if (target == null)
+				return;
+
+			Vector3 newPosition = cachedTransform.position;
+
+			newPosition = target.position;
+			newPosition.x = Mathf.Floor((newPosition.x + offset.x) * pixelsPerUnit) / pixelsPerUnit;
+			newPosition.y = Mathf.Floor((newPosition.y + offset.y) * pixelsPerUnit) / pixelsPerUnit;
+			newPosition.z = -10f;
+
+			transform.position = newPosition;
+		}
+
+		private void FixedUpdate()
+		{
+			if (target == null)
+				return;
+
+			Vector3 newPosition = cachedTransform.position;
+
+			newPosition = Vector3.Lerp(newPosition, target.position, smoothValue * Time.fixedDeltaTime);
+			newPosition.x = Mathf.Floor((newPosition.x + offset.x) * pixelsPerUnit) / pixelsPerUnit;
+			newPosition.y = Mathf.Floor((newPosition.y + offset.y) * pixelsPerUnit) / pixelsPerUnit;
+			newPosition.z = -10f;
+
+			cachedTransform.position = newPosition;
+		}
+
+
+		public void Process(Transform value) =>
+			target = value;
 	}
 }

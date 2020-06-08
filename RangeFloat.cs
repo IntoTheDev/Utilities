@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ToolBox.Framework.Utilities
+namespace ToolBox.Utilities
 {
 	[System.Serializable]
 	public struct RangeFloat

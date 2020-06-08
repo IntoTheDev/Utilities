@@ -1,15 +1,15 @@
 ﻿using Sirenix.OdinInspector;
-using Sirenix.Serialization;
-using ToolBox.Groups;
+using ToolBox.Extensions;
 using ToolBox.Modules;
+using ToolBox.Tags;
 using UnityEngine;
 
-namespace ToolBox.Framework.Utilities
+namespace ToolBox.Utilities
 {
 	[DisallowMultipleComponent, RequireComponent(typeof(Collider2D))]
-	public abstract class TriggerArea : SerializedMonoBehaviour
+	public abstract class TriggerArea : MonoBehaviour
 	{
-		[OdinSerialize, ListDrawerSettings(NumberOfItemsPerPage = 1, Expanded = true, DraggableItems = false), FoldoutGroup("Data")] protected EventsData[] onEnter = null;
+		[SerializeField, ListDrawerSettings(NumberOfItemsPerPage = 1, Expanded = true, DraggableItems = false), FoldoutGroup("Data")] protected EventsData[] onEnter = null;
 
 		[SerializeField, ReadOnly, FoldoutGroup("Debug")] protected int index = 0;
 
@@ -24,13 +24,14 @@ namespace ToolBox.Framework.Utilities
 			[SerializeField] private string editorName;
 #endif
 
-			[SerializeField, AssetSelector] private Group[] groups;
-			[SerializeField] private ModulesContainer reactors;
-			[SerializeField] private ModulesContainer<GameObject> reactorsGeneric;
+			[SerializeField, AssetSelector] private Tag[] tags;
+			[SerializeField] private bool allTagsRequired;
+			[SerializeReference] private ModulesContainer reactors;
+			[SerializeReference] private ModulesContainer<GameObject> reactorsGeneric;
 
 			public void Call(GameObject entity)
 			{
-				if (!Group.IsEntityInGroups(entity, groups, CheckType.AllGroups))
+				if (!entity.HasTags(tags, allTagsRequired))
 					return;
 
 				reactors.Process();

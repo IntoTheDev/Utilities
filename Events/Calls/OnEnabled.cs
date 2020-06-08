@@ -1,6 +1,4 @@
-﻿using ToolBox.Observer;
-
-namespace ToolBox.Framework.Utilities
+﻿namespace ToolBox.Utilities
 {
 	public class OnEnabled : OnEvent
 	{

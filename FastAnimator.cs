@@ -1,100 +1,102 @@
 ﻿using MEC;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using System.Collections.Generic;
 using ToolBox.Modules;
 using UnityEngine;
 
-public class FastAnimator : SerializedMonoBehaviour, IModule
+namespace ToolBox.Utilities
 {
-	[SerializeField, Required, ChildGameObjectsOnly] private SpriteRenderer spriteRenderer = null;
-	[OdinSerialize, PageList] private Animation[] animations = default;
-
-	private Animation currentAnimation = default;
-
-	private void Awake()
+	public class FastAnimator : MonoBehaviour, IModule
 	{
-		for (int i = 0; i < animations.Length; i++)
-			animations[i].OnAwake(spriteRenderer);
-	}
+		[SerializeField, Required, ChildGameObjectsOnly] private SpriteRenderer spriteRenderer = null;
+		[SerializeField, PageList] private Animation[] animations = default;
 
-	[Button]
-	public void PlayAnimation(int index) =>
-		PlayAnimationInternal(index);
+		private Animation currentAnimation = default;
 
-	[Button]
-	public void StopAnimation() =>
-		currentAnimation?.Stop();
-
-	public void Process() =>
-		PlayAnimationInternal(0);
-
-	private void PlayAnimationInternal(int index)
-	{
-		if (currentAnimation != null)
-			currentAnimation.Stop();
-
-		if (index >= animations.Length)
-			return;
-
-		currentAnimation = animations[index];
-		animations[index].Play();
-	}
-
-	[System.Serializable]
-	private class Animation
-	{
-		[SerializeField] private float timeBetweenFrames = 1f;
-		[SerializeField] private Frame[] frames = null;
-
-		private CoroutineHandle coroutine = default;
-		private SpriteRenderer spriteRenderer = null;
-		private GameObject root = null;
-		private int index = 0;
-
-		public void OnAwake(SpriteRenderer spriteRenderer)
+		private void Awake()
 		{
-			this.spriteRenderer = spriteRenderer;
-			root = spriteRenderer.gameObject;
+			for (int i = 0; i < animations.Length; i++)
+				animations[i].OnAwake(spriteRenderer);
 		}
 
-		public void Play() =>
-			coroutine = Timing.RunCoroutine(Process().CancelWith(root));
+		[Button]
+		public void PlayAnimation(int index) =>
+			PlayAnimationInternal(index);
 
-		public void Stop() =>
-			Timing.KillCoroutines(coroutine);
+		[Button]
+		public void StopAnimation() =>
+			currentAnimation?.Stop();
 
-		private IEnumerator<float> Process()
+		public void Process() =>
+			PlayAnimationInternal(0);
+
+		private void PlayAnimationInternal(int index)
 		{
-			Frame firstFrame = frames[0];
+			if (currentAnimation != null)
+				currentAnimation.Stop();
 
-			spriteRenderer.sprite = firstFrame.Sprite;
-			firstFrame.OnFramePlayed.Process();
-			index++;
+			if (index >= animations.Length)
+				return;
 
-			while (true)
+			currentAnimation = animations[index];
+			animations[index].Play();
+		}
+
+		[System.Serializable]
+		private class Animation
+		{
+			[SerializeField] private float timeBetweenFrames = 1f;
+			[SerializeField] private Frame[] frames = null;
+
+			private CoroutineHandle coroutine = default;
+			private SpriteRenderer spriteRenderer = null;
+			private GameObject root = null;
+			private int index = 0;
+
+			public void OnAwake(SpriteRenderer spriteRenderer)
 			{
-				yield return Timing.WaitForSeconds(timeBetweenFrames);
+				this.spriteRenderer = spriteRenderer;
+				root = spriteRenderer.gameObject;
+			}
 
-				if (index == frames.Length)
-					index = 0;
+			public void Play() =>
+				coroutine = Timing.RunCoroutine(Process().CancelWith(root));
 
-				Frame currentFrame = frames[index];
+			public void Stop() =>
+				Timing.KillCoroutines(coroutine);
 
-				spriteRenderer.sprite = currentFrame.Sprite;
-				currentFrame.OnFramePlayed.Process();
+			private IEnumerator<float> Process()
+			{
+				Frame firstFrame = frames[0];
+
+				spriteRenderer.sprite = firstFrame.Sprite;
+				firstFrame.OnFramePlayed.Process();
 				index++;
+
+				while (true)
+				{
+					yield return Timing.WaitForSeconds(timeBetweenFrames);
+
+					if (index == frames.Length)
+						index = 0;
+
+					Frame currentFrame = frames[index];
+
+					spriteRenderer.sprite = currentFrame.Sprite;
+					currentFrame.OnFramePlayed.Process();
+					index++;
+				}
 			}
 		}
-	}
 
-	[System.Serializable]
-	private struct Frame
-	{
-		[SerializeField, Required, AssetSelector] private Sprite sprite;
-		[SerializeField] private ModulesContainer onFramePlayed;
+		[System.Serializable]
+		private struct Frame
+		{
+			[SerializeField, Required, AssetSelector] private Sprite sprite;
+			[SerializeField] private ModulesContainer onFramePlayed;
 
-		public Sprite Sprite => sprite;
-		public ModulesContainer OnFramePlayed => onFramePlayed;
+			public Sprite Sprite => sprite;
+			public ModulesContainer OnFramePlayed => onFramePlayed;
+		}
 	}
 }

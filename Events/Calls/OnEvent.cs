@@ -1,11 +1,11 @@
 ﻿using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using ToolBox.Modules;
+using UnityEngine;
 
-namespace ToolBox.Framework.Utilities
+namespace ToolBox.Utilities
 {
-	public abstract class OnEvent : SerializedMonoBehaviour
+	public abstract class OnEvent : MonoBehaviour
 	{
-		[OdinSerialize, ListDrawerSettings(Expanded = true)] protected ModulesContainer reactors = default;
+		[SerializeField, ListDrawerSettings(Expanded = true)] protected ModulesContainer reactors = null;
 	}
 }

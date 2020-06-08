@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ToolBox.Framework.Utilities
+namespace ToolBox.Utilities
 {
 	public class EnterArea : TriggerArea
 	{
