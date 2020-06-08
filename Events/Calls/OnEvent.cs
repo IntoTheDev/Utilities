@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace ToolBox.Utilities
 {
-	public abstract class OnEvent : MonoBehaviour
+	public abstract class OnEvent : SerializedMonoBehaviour
 	{
-		[SerializeField, ListDrawerSettings(Expanded = true)] protected ModulesContainer reactors = null;
+		[SerializeField, ListDrawerSettings(Expanded = true)] protected ModulesContainer modules = null;
 	}
 }

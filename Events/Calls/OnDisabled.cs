@@ -3,6 +3,6 @@
 	public class OnDisabled : OnEvent
 	{
 		private void OnDisable() =>
-			reactors.Process();
+			modules.Process();
 	}
 }

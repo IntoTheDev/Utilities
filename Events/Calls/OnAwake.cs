@@ -3,6 +3,6 @@
 	public class OnAwake : OnEvent
 	{
 		private void Awake() =>
-			reactors.Process();
+			modules.Process();
 	}
 }
