@@ -1,12 +1,12 @@
 ﻿using MEC;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
-using ToolBox.Modules;
+using ToolBox.Signals.Local;
 using UnityEngine;
 
 namespace ToolBox.Utilities
 {
-	public class FastAnimator : MonoBehaviour, IModule
+	public class FastAnimator : MonoBehaviour, ISignalReceiver
 	{
 		[SerializeField, Required, ChildGameObjectsOnly] private SpriteRenderer spriteRenderer = null;
 		[SerializeField, PageList] private Animation[] animations = default;
@@ -27,7 +27,7 @@ namespace ToolBox.Utilities
 		public void StopAnimation() =>
 			currentAnimation?.Stop();
 
-		public void Process() =>
+		public void Receive() =>
 			PlayAnimationInternal(0);
 
 		private void PlayAnimationInternal(int index)
@@ -41,6 +41,7 @@ namespace ToolBox.Utilities
 			currentAnimation = animations[index];
 			animations[index].Play();
 		}
+
 
 		[System.Serializable]
 		private class Animation
@@ -57,6 +58,9 @@ namespace ToolBox.Utilities
 			{
 				this.spriteRenderer = spriteRenderer;
 				root = spriteRenderer.gameObject;
+
+				for (int i = 0; i < frames.Length; i++)
+					frames[i].OnFramePlayed.Initialize();
 			}
 
 			public void Play() =>
@@ -70,7 +74,7 @@ namespace ToolBox.Utilities
 				Frame firstFrame = frames[0];
 
 				spriteRenderer.sprite = firstFrame.Sprite;
-				firstFrame.OnFramePlayed.Process();
+				firstFrame.OnFramePlayed.Dispatch();
 				index++;
 
 				while (true)
@@ -83,7 +87,7 @@ namespace ToolBox.Utilities
 					Frame currentFrame = frames[index];
 
 					spriteRenderer.sprite = currentFrame.Sprite;
-					currentFrame.OnFramePlayed.Process();
+					currentFrame.OnFramePlayed.Dispatch();
 					index++;
 				}
 			}
@@ -93,10 +97,10 @@ namespace ToolBox.Utilities
 		private struct Frame
 		{
 			[SerializeField, Required, AssetSelector] private Sprite sprite;
-			[SerializeField] private ModulesContainer onFramePlayed;
+			[SerializeField] private LocalSignal onFramePlayed;
 
 			public Sprite Sprite => sprite;
-			public ModulesContainer OnFramePlayed => onFramePlayed;
+			public LocalSignal OnFramePlayed => onFramePlayed;
 		}
 	}
 }

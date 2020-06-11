@@ -2,7 +2,11 @@
 {
 	public class OnAwake : OnEvent
 	{
-		private void Awake() =>
-			modules.Process();
+		protected override void Awake()
+		{
+			base.Awake();
+
+			localSignal.Dispatch();
+		}
 	}
 }

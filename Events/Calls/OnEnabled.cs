@@ -3,6 +3,6 @@
 	public class OnEnabled : OnEvent
 	{
 		private void OnEnable() =>
-			modules.Process();
+			localSignal.Dispatch();
 	}
 }

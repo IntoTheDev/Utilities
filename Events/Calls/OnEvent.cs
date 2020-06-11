@@ -1,11 +1,14 @@
 ﻿using Sirenix.OdinInspector;
-using ToolBox.Modules;
+using ToolBox.Signals.Local;
 using UnityEngine;
 
 namespace ToolBox.Utilities
 {
-	public abstract class OnEvent : SerializedMonoBehaviour
+	public abstract class OnEvent : MonoBehaviour
 	{
-		[SerializeField, ListDrawerSettings(Expanded = true)] protected ModulesContainer modules = null;
+		[SerializeReference, ListDrawerSettings(Expanded = true)] protected LocalSignal localSignal = null;
+
+		protected virtual void Awake() =>
+			localSignal.Initialize();
 	}
 }
