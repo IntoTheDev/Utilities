@@ -2,11 +2,7 @@
 {
 	public class OnAwake : OnEvent
 	{
-		protected override void Awake()
-		{
-			base.Awake();
-
-			localSignal.Dispatch();
-		}
+		private void Awake() =>
+			reactor.SendReaction();
 	}
 }

@@ -1,9 +1,9 @@
-﻿using ToolBox.Signals.Local;
+﻿using ToolBox.Reactors;
 using UnityEngine;
 
 namespace ToolBox.Utilities
 {
-	public class PixelPerfectFollow : MonoBehaviour, ISignalReceiver<Transform>
+	public class PixelPerfectFollow : MonoBehaviour, ITransformReactor
 	{
 		[SerializeField] private float pixelsPerUnit = 16f;
 		[SerializeField] private Transform target = null;
@@ -45,7 +45,7 @@ namespace ToolBox.Utilities
 			cachedTransform.position = newPosition;
 		}
 
-		public void Receive(Transform value) =>
+		public void HandleReaction(Transform value) =>
 			target = value;
 	}
 }

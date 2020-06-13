@@ -3,6 +3,6 @@
 	public class OnStart : OnEvent
 	{
 		private void Start() =>
-			localSignal.Dispatch();
+			reactor.SendReaction();
 	}
 }

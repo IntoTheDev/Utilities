@@ -1,12 +1,12 @@
 ﻿using MEC;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
-using ToolBox.Signals.Local;
+using ToolBox.Reactors;
 using UnityEngine;
 
 namespace ToolBox.Utilities
 {
-	public class FastAnimator : MonoBehaviour, ISignalReceiver
+	public class FastAnimator : MonoBehaviour, IReactor
 	{
 		[SerializeField, Required, ChildGameObjectsOnly] private SpriteRenderer spriteRenderer = null;
 		[SerializeField, PageList] private Animation[] animations = default;
@@ -27,7 +27,7 @@ namespace ToolBox.Utilities
 		public void StopAnimation() =>
 			currentAnimation?.Stop();
 
-		public void Receive() =>
+		public void HandleReaction() =>
 			PlayAnimationInternal(0);
 
 		private void PlayAnimationInternal(int index)
@@ -58,9 +58,6 @@ namespace ToolBox.Utilities
 			{
 				this.spriteRenderer = spriteRenderer;
 				root = spriteRenderer.gameObject;
-
-				for (int i = 0; i < frames.Length; i++)
-					frames[i].OnFramePlayed.Initialize();
 			}
 
 			public void Play() =>
@@ -74,7 +71,7 @@ namespace ToolBox.Utilities
 				Frame firstFrame = frames[0];
 
 				spriteRenderer.sprite = firstFrame.Sprite;
-				firstFrame.OnFramePlayed.Dispatch();
+				firstFrame.OnFramePlayed.SendReaction();
 				index++;
 
 				while (true)
@@ -87,7 +84,7 @@ namespace ToolBox.Utilities
 					Frame currentFrame = frames[index];
 
 					spriteRenderer.sprite = currentFrame.Sprite;
-					currentFrame.OnFramePlayed.Dispatch();
+					currentFrame.OnFramePlayed.SendReaction();
 					index++;
 				}
 			}
@@ -97,10 +94,10 @@ namespace ToolBox.Utilities
 		private struct Frame
 		{
 			[SerializeField, Required, AssetSelector] private Sprite sprite;
-			[SerializeField] private LocalSignal onFramePlayed;
+			[SerializeField] private Reactor onFramePlayed;
 
 			public Sprite Sprite => sprite;
-			public LocalSignal OnFramePlayed => onFramePlayed;
+			public Reactor OnFramePlayed => onFramePlayed;
 		}
 	}
 }
