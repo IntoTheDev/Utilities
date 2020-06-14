@@ -3,6 +3,6 @@
 	public class OnEnabled : OnEvent
 	{
 		private void OnEnable() =>
-			reactor.SendReaction();
+			_reactor.SendReaction();
 	}
 }

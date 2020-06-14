@@ -6,6 +6,6 @@ namespace ToolBox.Utilities
 {
 	public abstract class OnEvent : MonoBehaviour
 	{
-		[SerializeField, ListDrawerSettings(Expanded = true)] protected Reactor reactor = null;
+		[SerializeField, ListDrawerSettings(Expanded = true)] protected Reactor _reactor = null;
 	}
 }

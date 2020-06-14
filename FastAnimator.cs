@@ -8,15 +8,15 @@ namespace ToolBox.Utilities
 {
 	public class FastAnimator : MonoBehaviour, IReactor
 	{
-		[SerializeField, Required, ChildGameObjectsOnly] private SpriteRenderer spriteRenderer = null;
-		[SerializeField, PageList] private Animation[] animations = default;
+		[SerializeField, Required, ChildGameObjectsOnly] private SpriteRenderer _spriteRenderer = null;
+		[SerializeField, PageList] private Animation[] _animations = default;
 
-		private Animation currentAnimation = default;
+		private Animation _currentAnimation = default;
 
 		private void Awake()
 		{
-			for (int i = 0; i < animations.Length; i++)
-				animations[i].OnAwake(spriteRenderer);
+			for (int i = 0; i < _animations.Length; i++)
+				_animations[i].OnAwake(_spriteRenderer);
 		}
 
 		[Button]
@@ -25,67 +25,67 @@ namespace ToolBox.Utilities
 
 		[Button]
 		public void StopAnimation() =>
-			currentAnimation?.Stop();
+			_currentAnimation?.Stop();
 
 		public void HandleReaction() =>
 			PlayAnimationInternal(0);
 
 		private void PlayAnimationInternal(int index)
 		{
-			if (currentAnimation != null)
-				currentAnimation.Stop();
+			if (_currentAnimation != null)
+				_currentAnimation.Stop();
 
-			if (index >= animations.Length)
+			if (index >= _animations.Length)
 				return;
 
-			currentAnimation = animations[index];
-			animations[index].Play();
+			_currentAnimation = _animations[index];
+			_animations[index].Play();
 		}
 
 
 		[System.Serializable]
 		private class Animation
 		{
-			[SerializeField] private float timeBetweenFrames = 1f;
-			[SerializeField] private Frame[] frames = null;
+			[SerializeField] private float _timeBetweenFrames = 1f;
+			[SerializeField] private Frame[] _frames = null;
 
-			private CoroutineHandle coroutine = default;
-			private SpriteRenderer spriteRenderer = null;
-			private GameObject root = null;
-			private int index = 0;
+			private CoroutineHandle _coroutine = default;
+			private SpriteRenderer _spriteRenderer = null;
+			private GameObject _root = null;
+			private int _index = 0;
 
 			public void OnAwake(SpriteRenderer spriteRenderer)
 			{
-				this.spriteRenderer = spriteRenderer;
-				root = spriteRenderer.gameObject;
+				_spriteRenderer = spriteRenderer;
+				_root = spriteRenderer.gameObject;
 			}
 
 			public void Play() =>
-				coroutine = Timing.RunCoroutine(Process().CancelWith(root));
+				_coroutine = Timing.RunCoroutine(Process().CancelWith(_root));
 
 			public void Stop() =>
-				Timing.KillCoroutines(coroutine);
+				Timing.KillCoroutines(_coroutine);
 
 			private IEnumerator<float> Process()
 			{
-				Frame firstFrame = frames[0];
+				Frame firstFrame = _frames[0];
 
-				spriteRenderer.sprite = firstFrame.Sprite;
+				_spriteRenderer.sprite = firstFrame.Sprite;
 				firstFrame.OnFramePlayed.SendReaction();
-				index++;
+				_index++;
 
 				while (true)
 				{
-					yield return Timing.WaitForSeconds(timeBetweenFrames);
+					yield return Timing.WaitForSeconds(_timeBetweenFrames);
 
-					if (index == frames.Length)
-						index = 0;
+					if (_index == _frames.Length)
+						_index = 0;
 
-					Frame currentFrame = frames[index];
+					Frame currentFrame = _frames[_index];
 
-					spriteRenderer.sprite = currentFrame.Sprite;
+					_spriteRenderer.sprite = currentFrame.Sprite;
 					currentFrame.OnFramePlayed.SendReaction();
-					index++;
+					_index++;
 				}
 			}
 		}
@@ -93,11 +93,11 @@ namespace ToolBox.Utilities
 		[System.Serializable]
 		private struct Frame
 		{
-			[SerializeField, Required, AssetSelector] private Sprite sprite;
-			[SerializeField] private Reactor onFramePlayed;
+			[SerializeField, Required, AssetSelector] private Sprite _sprite;
+			[SerializeField] private Reactor _onFramePlayed;
 
-			public Sprite Sprite => sprite;
-			public Reactor OnFramePlayed => onFramePlayed;
+			public Sprite Sprite => _sprite;
+			public Reactor OnFramePlayed => _onFramePlayed;
 		}
 	}
 }

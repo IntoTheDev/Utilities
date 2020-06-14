@@ -5,16 +5,16 @@ namespace ToolBox.Utilities
 {
 	public class RoundRobinPositionSelector : IPositionSelector
 	{
-		[ShowInInspector, ReadOnly] private int index = 0;
-		[SerializeField, Required, SceneObjectsOnly] private Transform[] points = null;
+		[ShowInInspector, ReadOnly] private int _index = 0;
+		[SerializeField, Required, SceneObjectsOnly] private Transform[] _points = null;
 
 		public Vector3 GetPosition()
 		{
-			Vector3 position = points[index].position;
-			index++;
+			Vector3 position = _points[_index].position;
+			_index++;
 
-			if (index == points.Length)
-				index = 0;
+			if (_index == _points.Length)
+				_index = 0;
 
 			return position;
 		}

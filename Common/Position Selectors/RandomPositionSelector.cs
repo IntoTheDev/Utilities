@@ -5,12 +5,12 @@ namespace ToolBox.Utilities
 {
 	public class RandomPositionSelector : IPositionSelector
 	{
-		[SerializeField, Required, SceneObjectsOnly] private Transform[] points = null;
+		[SerializeField, Required, SceneObjectsOnly] private Transform[] _points = null;
 
 		public Vector3 GetPosition()
 		{
-			int index = Random.Range(0, points.Length);
-			return points[index].position;
+			int index = Random.Range(0, _points.Length);
+			return _points[index].position;
 		}
 	}
 }

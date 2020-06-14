@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CinemachinePixelPosition : CinemachineExtension
 {
-	[SerializeField] private float pixelsPerUnit = 16f;
+	[SerializeField] private float _pixelsPerUnit = 16f;
 
 	protected override void PostPipelineStageCallback(CinemachineVirtualCameraBase vcam, CinemachineCore.Stage stage, ref CameraState state, float deltaTime)
 	{

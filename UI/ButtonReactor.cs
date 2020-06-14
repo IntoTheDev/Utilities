@@ -7,16 +7,16 @@ namespace ToolBox.Utilities
 {
 	public class ButtonReactor : MonoBehaviour
 	{
-		[SerializeField, Required, ChildGameObjectsOnly] private Button button = null;
-		[SerializeField, Required] private Reactor onClick = null;
+		[SerializeField, Required, ChildGameObjectsOnly] private Button _button = null;
+		[SerializeField, Required] private Reactor _onClick = null;
 
 		private void OnEnable() =>
-			button.onClick.AddListener(ProcessReactor);
+			_button.onClick.AddListener(ProcessReactor);
 
 		private void OnDisable() =>
-			button.onClick.RemoveListener(ProcessReactor);
+			_button.onClick.RemoveListener(ProcessReactor);
 
 		private void ProcessReactor() =>
-			onClick.SendReaction();
+			_onClick.SendReaction();
 	}
 }
