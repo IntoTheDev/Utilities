@@ -58,6 +58,9 @@ namespace ToolBox.Utilities
 			{
 				_spriteRenderer = spriteRenderer;
 				_root = spriteRenderer.gameObject;
+
+				for (int i = 0; i < _frames.Length; i++)
+					_frames[i].Setup();
 			}
 
 			public void Play() =>
@@ -91,13 +94,16 @@ namespace ToolBox.Utilities
 		}
 
 		[System.Serializable]
-		private struct Frame
+		private struct Frame : ISetupable
 		{
 			[SerializeField, Required, AssetSelector] private Sprite _sprite;
 			[SerializeField] private Reactor _onFramePlayed;
 
 			public Sprite Sprite => _sprite;
 			public Reactor OnFramePlayed => _onFramePlayed;
+
+			public void Setup() =>
+				_onFramePlayed.Setup();
 		}
 	}
 }

@@ -9,32 +9,38 @@ namespace ToolBox.Utilities
 	[DisallowMultipleComponent, RequireComponent(typeof(Collider2D))]
 	public abstract class TriggerArea : MonoBehaviour
 	{
-		[SerializeField, ListDrawerSettings(NumberOfItemsPerPage = 1, Expanded = true, DraggableItems = false), FoldoutGroup("Data")] protected EventsData[] onEnter = null;
+		[SerializeField, ListDrawerSettings(NumberOfItemsPerPage = 1, Expanded = true, DraggableItems = false), FoldoutGroup("Data")] protected EventsData[] _onEnter = null;
 
-		[SerializeField, ReadOnly, FoldoutGroup("Debug")] protected int index = 0;
+		[SerializeField, ReadOnly, FoldoutGroup("Debug")] protected int _index = 0;
 
 		[Button("Set Index"), FoldoutGroup("Debug")]
 		public void SetIndex(int index) =>
-			this.index = index;
+			_index = index;
 
-		protected struct EventsData
+		protected struct EventsData : ISetupable
 		{
 #if UNITY_EDITOR
-			[SerializeField] private string editorName;
+			[SerializeField] private string _editorName;
 #endif
 
-			[SerializeField, AssetSelector] private Tag[] tags;
-			[SerializeField] private bool allTagsRequired;
-			[SerializeField] private Reactor onEntityEnters;
-			[SerializeField] private GameObjectReactor onEntityEntersGeneric;
+			[SerializeField, AssetSelector] private Tag[] _tags;
+			[SerializeField] private bool _allTagsRequired;
+			[SerializeField] private Reactor _onEntityEnters;
+			[SerializeField] private GameObjectReactor _onEntityEntersGeneric;
+
+			public void Setup()
+			{
+				_onEntityEnters.Setup();
+				_onEntityEntersGeneric.Setup();
+			}
 
 			public void Call(GameObject entity)
 			{
-				if (!entity.HasTags(tags, allTagsRequired))
+				if (!entity.HasTags(_tags, _allTagsRequired))
 					return;
 				
-				onEntityEnters.SendReaction();
-				onEntityEntersGeneric.SendReaction(entity);
+				_onEntityEnters.SendReaction();
+				_onEntityEntersGeneric.SendReaction(entity);
 			}
 		}
 	}

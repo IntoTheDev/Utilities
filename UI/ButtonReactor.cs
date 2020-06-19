@@ -10,6 +10,9 @@ namespace ToolBox.Utilities
 		[SerializeField, Required, ChildGameObjectsOnly] private Button _button = null;
 		[SerializeField, Required] private Reactor _onClick = null;
 
+		private void Awake() =>
+			_onClick.Setup();
+
 		private void OnEnable() =>
 			_button.onClick.AddListener(ProcessReactor);
 
