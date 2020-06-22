@@ -24,7 +24,7 @@ namespace ToolBox.Utilities
             _isWorking = true;
         }
 
-        private void InternalIncreaseValue()
+        private void IncreaseValue()
         {
             if (!_isWorking)
                 return;
