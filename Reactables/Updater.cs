@@ -1,13 +1,12 @@
-﻿using MEC;
+using MEC;
 using Sirenix.OdinInspector;
-using System.Collections;
 using System.Collections.Generic;
 using ToolBox.Reactors;
 using UnityEngine;
 
 namespace ToolBox.Utilities
 {
-	public class Updater : MonoBehaviour
+    public class Updater : MonoBehaviour
 	{
         [SerializeField] private Segment _segment = Segment.Update;
         [SerializeField, Required] private Reactor _reactor = null;
