@@ -16,7 +16,7 @@ namespace ToolBox.Utilities
         private void Awake()
         {
             _reactor.Setup();
-            _coroutine = Timing.RunCoroutine(Update().CancelWith(gameObject), _segment);
+            _coroutine = Timing.RunCoroutine(Update(), _segment);
         }
 
         private void OnEnable() =>
