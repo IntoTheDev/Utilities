@@ -21,13 +21,4 @@ namespace ToolBox.Utilities
 		}
 #endif
 	}
-
-	public class GuidDisplay : IReactor
-	{
-		[SerializeField, Required, AssetSelector] private AssetWithGuid _asset = null;
-		[SerializeField, Required, SceneObjectsOnly] private TMP_Text _view = null;
-
-		public void HandleReaction() =>
-			_view.text = _asset.Value;
-	}
 }
