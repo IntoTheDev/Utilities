@@ -12,12 +12,10 @@ namespace ToolBox.Utilities
 
 		public string Value => _value;
 
-#if UNITY_EDITOR
-		private void OnEnable()
+		private void OnValidate()
 		{
 			if (string.IsNullOrEmpty(_value))
 				_value = Guid.NewGuid().ToString();
 		}
-#endif
 	}
 }
