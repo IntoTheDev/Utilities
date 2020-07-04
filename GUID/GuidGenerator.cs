@@ -20,9 +20,10 @@ namespace ToolBox.Utilities
 
 			Generate(ref _prefabValue);
 
-			string sceneName = gameObject.scene.name;
+			GameObject obj = gameObject;
+			string sceneName = obj.scene.name;
 
-			if (sceneName != gameObject.name && gameObject.activeInHierarchy)
+			if (sceneName != obj.name && obj.activeInHierarchy)
 				Generate(ref _instanceValue);
 			else
 				_instanceValue = null;
