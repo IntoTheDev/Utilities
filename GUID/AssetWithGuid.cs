@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ToolBox.Utilities
 {
-	[CreateAssetMenu(menuName = "ToolBox/Guid/Asset")]
+	[CreateAssetMenu(menuName = "ToolBox/Guid/Asset"), AssetSelector]
 	public class AssetWithGuid : ScriptableObject
 	{
 		[SerializeField, ReadOnly] private string _value = "";
