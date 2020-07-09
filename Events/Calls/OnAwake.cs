@@ -6,6 +6,7 @@
 		{
 			base.Awake();
 			_reactor.SendReaction();
+			Destroy(this);
 		}
 	}
 }

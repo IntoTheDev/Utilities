@@ -15,21 +15,6 @@ namespace ToolBox.Utilities
 		private void Awake() =>
 			_transform = transform;
 
-		private void OnValidate()
-		{
-			if (_target == null)
-				return;
-
-			Vector3 newPosition = _transform.position;
-
-			newPosition = _target.position;
-			newPosition.x = Mathf.Floor((newPosition.x + _offset.x) * _pixelsPerUnit) / _pixelsPerUnit;
-			newPosition.y = Mathf.Floor((newPosition.y + _offset.y) * _pixelsPerUnit) / _pixelsPerUnit;
-			newPosition.z = -10f;
-
-			transform.position = newPosition;
-		}
-
 		private void FixedUpdate()
 		{
 			if (_target == null)

@@ -7,16 +7,16 @@ namespace ToolBox.Utilities
 	[CreateAssetMenu(menuName = "ToolBox/Guid/Asset"), AssetSelector]
 	public class AssetWithGuid : ScriptableObject
 	{
-		[SerializeField, ReadOnly] private string _value = "";
+		[SerializeField, ReadOnly] protected string _value = "";
 
 		public string Value => _value;
 
-#if UNITY_EDITOR
-		private void OnEnable()
+		protected virtual void OnEnable()
 		{
+#if UNITY_EDITOR
 			if (string.IsNullOrEmpty(_value))
 				_value = Guid.NewGuid().ToString();
-		}
 #endif
+		}
 	}
 }

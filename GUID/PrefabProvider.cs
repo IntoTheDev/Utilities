@@ -1,15 +1,26 @@
 ﻿using Sirenix.OdinInspector;
+#if UNITY_EDITOR
+using Sirenix.Utilities.Editor;
+#endif
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace ToolBox.Utilities
 {
-	[CreateAssetMenu(menuName = "ToolBox/Guid/Prefab Provider"), AssetSelector]
+	[CreateAssetMenu(menuName = "ToolBox/Guid/Prefab Provider"), AssetSelector, Required]
 	public class PrefabProvider : ScriptableObject
 	{
-		[SerializeField, AssetList, Required] private GuidGenerator[] _prefabs = null;
+		[SerializeField, AssetList, Required, HideInPlayMode] private GuidGenerator[] _prefabs = null;
+		[ShowInInspector, ReadOnly, HideInEditorMode] private Dictionary<string, GameObject> _objects = null;
 
-		private Dictionary<string, GameObject> _objects = null;
+#if UNITY_EDITOR
+		private void Awake()
+		{
+			IEnumerable<GuidGenerator> prefabs = AssetUtilities.GetAllAssetsOfType<GuidGenerator>();
+			_prefabs = prefabs.ToArray();
+		}
+#endif
 
 		private void OnEnable()
 		{
@@ -23,7 +34,7 @@ namespace ToolBox.Utilities
 			}
 		}
 
-		public GameObject GetPrefab(string guid)
+		public GameObject Provide(string guid)
 		{
 			_objects.TryGetValue(guid, out GameObject prefab);
 			return prefab;

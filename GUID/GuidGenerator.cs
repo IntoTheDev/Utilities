@@ -1,38 +1,25 @@
 ﻿using Sirenix.OdinInspector;
 using System;
+using ToolBox.Test;
 using UnityEngine;
 
 namespace ToolBox.Utilities
 {
-	[DisallowMultipleComponent]
+	[DisallowMultipleComponent, DefaultExecutionOrder(-100)]
 	public class GuidGenerator : MonoBehaviour
 	{
 		[SerializeField, ReadOnly] private string _prefabValue = null;
-		[SerializeField, ReadOnly] private string _instanceValue = null;
 
 		public string PrefabValue => _prefabValue;
-		public string InstanceValue => _instanceValue;
 
 		private void OnValidate()
 		{
-			if (Application.isPlaying)
-				return;
-
-			Generate(ref _prefabValue);
-
-			GameObject obj = gameObject;
-			string sceneName = obj.scene.name;
-
-			if (sceneName != obj.name && obj.activeInHierarchy)
-				Generate(ref _instanceValue);
-			else
-				_instanceValue = null;
+			if (string.IsNullOrEmpty(_prefabValue))
+				_prefabValue = Guid.NewGuid().ToString();
 		}
 
-		private void Generate(ref string value)
-		{
-			if (string.IsNullOrEmpty(value))
-				value = Guid.NewGuid().ToString();
-		}
+		[Button]
+		private void GeneratePrefabValue() =>
+			_prefabValue = Guid.NewGuid().ToString();
 	}
 }
